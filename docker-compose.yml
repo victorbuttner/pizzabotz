@@ -1,0 +1,27 @@
+version: "2"
+services:
+  db:
+    image: "mongo:latest"
+    logging:
+      driver: "none"
+    networks:
+     - vpcbr
+  web:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/accounts
+    networks:
+     - vpcbr
+
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.7.0.0/16
+         gateway: 10.7.0.1
+
